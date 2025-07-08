@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Madeja de Oro catalogo</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Cortinas</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="root"></div>
-    <script src="bundle.js"></script>
+  <header>
+    <h1>Catálogo Virtual</h1>
+    <nav>
+      <a href="#" onclick="showPage('home')">Bienvenida</a>
+      <a href="#" onclick="showPage('catalog')">Catálogo</a>
+      <a href="#" onclick="showPage('calculator')">Calculadora</a>
+      <a href="#" onclick="showPage('admin')">Admin</a>
+    </nav>
+  </header>
+  <div id="container"></div>
+  <script src="../app.js"></script>
 </body>
 </html>
