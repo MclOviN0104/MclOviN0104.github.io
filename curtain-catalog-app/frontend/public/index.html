@@ -10,13 +10,17 @@
   <header>
     <h1>Catálogo Virtual</h1>
     <nav>
-      <a href="#" onclick="showPage('home')">Bienvenida</a>
-      <a href="#" onclick="showPage('catalog')">Catálogo</a>
-      <a href="#" onclick="showPage('calculator')">Calculadora</a>
-      <a href="#" onclick="showPage('admin')">Admin</a>
-    </nav>
+     <a href="#" data-tab="home" onclick="showPage('home')">Inicio</a>
+     <a href="#" data-tab="catalog" onclick="showPage('catalog')">Catálogo</a>
+     <!-- El botón de calculadora puede ocultarse o abrir un modal para elegir cortina -->
+     <!-- <a href="#" data-tab="calculator" onclick="showPage('calculator')">Calculadora</a> -->
+     <!-- El botón admin solo lo muestra el JS si isAdmin -->
+     <span id="admin-nav-link"></span>
+   </nav>
   </header>
-  <div id="container"></div>
+  <div id="container">
+    <h2 class="titulo-catalogo">Catálogo Virtual</h2>
+  </div>
   <script src="../app.js"></script>
 </body>
 </html>
