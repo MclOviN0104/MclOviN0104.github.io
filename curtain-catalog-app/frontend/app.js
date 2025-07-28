@@ -195,7 +195,7 @@ function showPage(page, cortinaSeleccionada = null) {
             <div style="font-size:1.3em; margin-top:0.5em;">Screen<br><strong>$${preciosCortinas.screen}</strong> por m²</div>
           </div>
           <div class="cortina-item" data-cortina="tradicional" style="cursor:pointer;">
-            <img src="https://www.cortinatecnica.com/sites/default/files/styles/large_retina/public/portfolio/cortina_tradicional.jpeg?itok=9VnwzfHo" alt="Cortina Tradicional">
+            <img src="https://persamsb.com/wp-content/uploads/2022/09/cortina-tradicional-3.jpg">
             <div style="font-size:1.3em; margin-top:0.5em;">Tradicional<br><strong>$${preciosCortinas.tradicional}</strong> por m²</div>
           </div>
         </div>
