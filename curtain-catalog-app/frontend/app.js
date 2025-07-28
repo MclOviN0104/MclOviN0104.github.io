@@ -1,6 +1,50 @@
 // Variable global para saber si el admin está autenticado
 let isAdmin = false;
 
+// URL del backend (ajusta si lo subes a la nube)
+const API_URL = "http://localhost:3001/api/precios";
+
+// Precios base (se sobrescriben al cargar desde backend)
+const preciosCortinas = {
+  blackout: 29,
+  screen: 15,
+  tradicional: 20
+};
+
+const preciosMontaje = {
+  enrollable: 500,
+  plegable: 400,
+  riel: 300
+};
+
+// --- FUNCIONES PARA BACKEND ---
+async function cargarPrecios() {
+  try {
+    const resp = await fetch(API_URL);
+    if (!resp.ok) throw new Error('Error al cargar precios');
+    const data = await resp.json();
+    Object.assign(preciosCortinas, data.preciosCortinas);
+    Object.assign(preciosMontaje, data.preciosMontaje);
+  } catch (err) {
+    alert('No se pudieron cargar los precios desde el servidor.');
+  }
+}
+
+async function guardarPrecios() {
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        preciosCortinas,
+        preciosMontaje
+      })
+    });
+  } catch (err) {
+    alert('No se pudieron guardar los precios en el servidor.');
+  }
+}
+
 // Función para marcar la pestaña activa en la barra de navegación
 function setActiveTab(tab) {
   const navLinks = document.querySelectorAll('nav a');
@@ -313,17 +357,19 @@ function showPage(page, cortinaSeleccionada = null) {
       <button id="adminSalirBtn" style="margin-top:2em;background:#bbb;color:#222;border:none;border-radius:6px;padding:0.5em 1.2em;font-weight:bold;cursor:pointer;">Salir</button>
     `;
 
-    document.getElementById('adminForm').onsubmit = function(e) {
-  e.preventDefault();
-  preciosCortinas.blackout = parseInt(document.getElementById('precioBlackout').value) || 0;
-  preciosCortinas.screen = parseInt(document.getElementById('precioScreen').value) || 0;
-  preciosCortinas.tradicional = parseInt(document.getElementById('precioTradicional').value) || 0;
-  preciosMontaje.enrollable = parseInt(document.getElementById('precioEnrollable').value) || 0;
-  preciosMontaje.plegable = parseInt(document.getElementById('precioPlegable').value) || 0;
-  preciosMontaje.riel = parseInt(document.getElementById('precioRiel').value) || 0;
-  guardarPrecios(); // <-- NUEVA LÍNEA
-  document.getElementById('adminMsg').innerHTML = '<span style="color:green;">¡Precios actualizados!</span>';
-};
+    document.getElementById('adminForm').onsubmit = async function(e) {
+      e.preventDefault();
+      preciosCortinas.blackout = parseInt(document.getElementById('precioBlackout').value) || 0;
+      preciosCortinas.screen = parseInt(document.getElementById('precioScreen').value) || 0;
+      preciosCortinas.tradicional = parseInt(document.getElementById('precioTradicional').value) || 0;
+      preciosMontaje.enrollable = parseInt(document.getElementById('precioEnrollable').value) || 0;
+      preciosMontaje.plegable = parseInt(document.getElementById('precioPlegable').value) || 0;
+      preciosMontaje.riel = parseInt(document.getElementById('precioRiel').value) || 0;
+      await guardarPrecios();
+      document.getElementById('adminMsg').innerHTML = '<span style="color:green;">¡Precios actualizados!</span>';
+      // Refresca valores en el catálogo por si el admin vuelve
+      await cargarPrecios();
+    };
 
     document.getElementById('adminSalirBtn').onclick = function() {
       isAdmin = false;
@@ -331,19 +377,6 @@ function showPage(page, cortinaSeleccionada = null) {
     };
   }
 }
-
-// Precios base de cortinas (por m²) y sistemas de montaje (por metro lineal)
-const preciosCortinas = {
-  blackout: 29,
-  screen: 15,
-  tradicional: 20
-};
-
-const preciosMontaje = {
-  enrollable: 500,
-  plegable: 400,
-  riel: 300
-};
 
 function calcularPresupuesto() {
   const tipoCortina = document.getElementById('tipoCortina').value;
@@ -371,25 +404,11 @@ function calcularPresupuesto() {
     <hr>
     <strong>Total: $${total.toFixed(2)}</strong>
   `;
-}// --- PERSISTENCIA DE PRECIOS CON LOCALSTORAGE ---
-// Recuperar precios guardados si existen
-const preciosGuardadosCortinas = localStorage.getItem('preciosCortinas');
-const preciosGuardadosMontaje = localStorage.getItem('preciosMontaje');
-if (preciosGuardadosCortinas) {
-  Object.assign(preciosCortinas, JSON.parse(preciosGuardadosCortinas));
-}
-if (preciosGuardadosMontaje) {
-  Object.assign(preciosMontaje, JSON.parse(preciosGuardadosMontaje));
-}
-
-// Funciones para guardar precios
-function guardarPrecios() {
-  localStorage.setItem('preciosCortinas', JSON.stringify(preciosCortinas));
-  localStorage.setItem('preciosMontaje', JSON.stringify(preciosMontaje));
 }
 
 // Mostrar la página de inicio por defecto y el botón admin
-window.onload = () => {
+window.onload = async () => {
+  await cargarPrecios();
   showPage('home');
   renderAdminButton();
   renderAdminNavLink();

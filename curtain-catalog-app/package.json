@@ -1,0 +1,16 @@
+{
+  "name": "curtain-catalog-app",
+  "version": "1.0.0",
+  "description": "## Overview The Curtain Catalog App is an interactive web platform designed for the custom curtain business, Diegux23. The application provides users with a catalog of prefabricated curtains and a budget calculator that allows for personalized pricing based on user-defined measurements and fabric choices.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
