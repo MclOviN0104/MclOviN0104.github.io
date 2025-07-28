@@ -314,15 +314,16 @@ function showPage(page, cortinaSeleccionada = null) {
     `;
 
     document.getElementById('adminForm').onsubmit = function(e) {
-      e.preventDefault();
-      preciosCortinas.blackout = parseInt(document.getElementById('precioBlackout').value) || 0;
-      preciosCortinas.screen = parseInt(document.getElementById('precioScreen').value) || 0;
-      preciosCortinas.tradicional = parseInt(document.getElementById('precioTradicional').value) || 0;
-      preciosMontaje.enrollable = parseInt(document.getElementById('precioEnrollable').value) || 0;
-      preciosMontaje.plegable = parseInt(document.getElementById('precioPlegable').value) || 0;
-      preciosMontaje.riel = parseInt(document.getElementById('precioRiel').value) || 0;
-      document.getElementById('adminMsg').innerHTML = '<span style="color:green;">¡Precios actualizados!</span>';
-    };
+  e.preventDefault();
+  preciosCortinas.blackout = parseInt(document.getElementById('precioBlackout').value) || 0;
+  preciosCortinas.screen = parseInt(document.getElementById('precioScreen').value) || 0;
+  preciosCortinas.tradicional = parseInt(document.getElementById('precioTradicional').value) || 0;
+  preciosMontaje.enrollable = parseInt(document.getElementById('precioEnrollable').value) || 0;
+  preciosMontaje.plegable = parseInt(document.getElementById('precioPlegable').value) || 0;
+  preciosMontaje.riel = parseInt(document.getElementById('precioRiel').value) || 0;
+  guardarPrecios(); // <-- NUEVA LÍNEA
+  document.getElementById('adminMsg').innerHTML = '<span style="color:green;">¡Precios actualizados!</span>';
+};
 
     document.getElementById('adminSalirBtn').onclick = function() {
       isAdmin = false;
@@ -333,9 +334,9 @@ function showPage(page, cortinaSeleccionada = null) {
 
 // Precios base de cortinas (por m²) y sistemas de montaje (por metro lineal)
 const preciosCortinas = {
-  blackout: 1200,
-  screen: 1000,
-  tradicional: 800
+  blackout: 29,
+  screen: 15,
+  tradicional: 20
 };
 
 const preciosMontaje = {
@@ -370,6 +371,21 @@ function calcularPresupuesto() {
     <hr>
     <strong>Total: $${total.toFixed(2)}</strong>
   `;
+}// --- PERSISTENCIA DE PRECIOS CON LOCALSTORAGE ---
+// Recuperar precios guardados si existen
+const preciosGuardadosCortinas = localStorage.getItem('preciosCortinas');
+const preciosGuardadosMontaje = localStorage.getItem('preciosMontaje');
+if (preciosGuardadosCortinas) {
+  Object.assign(preciosCortinas, JSON.parse(preciosGuardadosCortinas));
+}
+if (preciosGuardadosMontaje) {
+  Object.assign(preciosMontaje, JSON.parse(preciosGuardadosMontaje));
+}
+
+// Funciones para guardar precios
+function guardarPrecios() {
+  localStorage.setItem('preciosCortinas', JSON.stringify(preciosCortinas));
+  localStorage.setItem('preciosMontaje', JSON.stringify(preciosMontaje));
 }
 
 // Mostrar la página de inicio por defecto y el botón admin

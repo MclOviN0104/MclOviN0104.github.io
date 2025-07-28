@@ -20,7 +20,19 @@
   </header>
   <div id="container">
     <h2 class="titulo-catalogo">Catálogo Virtual</h2>
+    <!-- Ejemplo de productos con precio editable -->
+    <div>
+      <span>Cortina Blackout: $<span id="precio-blackout"></span></span>
+      <input type="number" id="input-precio-blackout" placeholder="Nuevo precio">
+      <button id="btn-guardar-precio-blackout">Guardar</button>
+    </div>
+    <div>
+      <span>Cortina Enrollable: $<span id="precio-enrollable"></span></span>
+      <input type="number" id="input-precio-enrollable" placeholder="Nuevo precio">
+      <button id="btn-guardar-precio-enrollable">Guardar</button>
+    </div>
   </div>
+  <script src="precios.js"></script>
   <script src="../app.js"></script>
 </body>
 </html>
