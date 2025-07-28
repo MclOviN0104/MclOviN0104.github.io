@@ -12,9 +12,9 @@ const preciosCortinas = {
 };
 
 const preciosMontaje = {
-  enrollable: 500,
-  plegable: 400,
-  riel: 300
+  enrollable: 30,
+  plegable: 20,
+  riel: 13
 };
 
 // --- FUNCIONES PARA BACKEND ---
