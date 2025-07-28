@@ -1,9 +1,6 @@
 // Variable global para saber si el admin está autenticado
 let isAdmin = false;
 
-// URL del backend (ajusta si lo subes a la nube)
-const API_URL = "http://localhost:3001/api/precios";
-
 // Precios base (se sobrescriben al cargar desde backend)
 const preciosCortinas = {
   blackout: 29,
@@ -18,31 +15,13 @@ const preciosMontaje = {
 };
 
 // --- FUNCIONES PARA BACKEND ---
+// Ahora estos métodos sólo usan los valores locales y no hacen llamadas de red:
 async function cargarPrecios() {
-  try {
-    const resp = await fetch(API_URL);
-    if (!resp.ok) throw new Error('Error al cargar precios');
-    const data = await resp.json();
-    Object.assign(preciosCortinas, data.preciosCortinas);
-    Object.assign(preciosMontaje, data.preciosMontaje);
-  } catch (err) {
-    alert('No se pudieron cargar los precios desde el servidor.');
-  }
+  // No hacer nada, los precios ya están inicializados localmente
 }
 
 async function guardarPrecios() {
-  try {
-    await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        preciosCortinas,
-        preciosMontaje
-      })
-    });
-  } catch (err) {
-    alert('No se pudieron guardar los precios en el servidor.');
-  }
+  // No hacer nada, ya no se guardan los cambios en el backend
 }
 
 // Función para marcar la pestaña activa en la barra de navegación
