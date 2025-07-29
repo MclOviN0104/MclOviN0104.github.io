@@ -191,7 +191,7 @@ function showPage(page, cortinaSeleccionada = null) {
             margin: 0 auto;
             text-align: center;
           ">
-            <h2 style="color:#6d8a88; font-size:2.3em;">Bienvenido al catalogo virtual de La Madej de Oro</h2>
+            <h2 style="color:#6d8a88; font-size:2.3em;">Bienvenido al catalogo virtual de La Madeja de Oro</h2>
             <p style="font-size:1.15em; color:#444; max-width:600px; margin:auto;">
               La Madeja de Oro Cortinas a medida con diseño impecable, materiales de calidad y elegancia atemporal.
             </p>
