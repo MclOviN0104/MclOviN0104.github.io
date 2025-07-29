@@ -191,9 +191,9 @@ function showPage(page, cortinaSeleccionada = null) {
             margin: 0 auto;
             text-align: center;
           ">
-            <h2 style="color:#6d8a88; font-size:2.3em;">Bienvenido a Cortinas Premium</h2>
+            <h2 style="color:#6d8a88; font-size:2.3em;">Bienvenido al catalogo virtual</h2>
             <p style="font-size:1.15em; color:#444; max-width:600px; margin:auto;">
-              Descubre nuestra exclusiva selección de cortinas y sistemas de montaje. Haz clic en <b>Catálogo</b> para ver los modelos y calcular tu presupuesto personalizado.
+              La Madeja de Oro Cortinas a medida con diseño impecable, materiales de calidad y elegancia atemporal.
             </p>
           </div>
         </div>
