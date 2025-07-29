@@ -14,40 +14,39 @@ const preciosMontaje = {
   riel: 13
 };
 
-// --- COLORES DE TELAS DE LUJO ---
+// --- COLORES DE TELAS DE LUJO (con imágenes sólidas) ---
 const telaColores = {
   blanco_perla: {
     nombre: "Blanco Perla",
-    img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+    color: "#f8f8f5"
   },
   gris_oxford: {
     nombre: "Gris Oxford",
-    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+    color: "#6a6a6a"
   },
   beige_arena: {
     nombre: "Beige Arena",
-    img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
+    color: "#e3ccb4"
   },
   marfil: {
     nombre: "Marfil",
-    img: "https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=400&q=80"
+    color: "#fdf6e3"
   },
   taupe: {
     nombre: "Taupé",
-    img: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=400&q=80"
+    color: "#b9a183"
   },
   azul_marino: {
     nombre: "Azul Marino",
-    img: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=80"
+    color: "#183152"
   },
   verde_esmeralda: {
     nombre: "Verde Esmeralda",
-    img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80"
+    color: "#2e8b57"
   }
 };
 
 // --- FUNCIONES PARA BACKEND ---
-// Ahora estos métodos sólo usan los valores locales y no hacen llamadas de red:
 async function cargarPrecios() {
   // No hacer nada, los precios ya están inicializados localmente
 }
@@ -92,7 +91,6 @@ function renderAdminButton() {
     btn.onclick = () => showAdminLogin();
     document.body.appendChild(btn);
   }
-  // El botón solo se muestra si NO eres admin y NO estás en admin
   btn.style.display = (!isAdmin) ? '' : 'none';
 }
 
@@ -296,7 +294,6 @@ function showPage(page, cortinaSeleccionada = null) {
         </div>
       </div>
     `;
-    // Solo desde el catálogo puedes acceder a la calculadora
     document.querySelectorAll('.cortina-item').forEach(item => {
       item.onclick = function () {
         showPage('calculator', this.dataset.cortina);
@@ -312,17 +309,19 @@ function showPage(page, cortinaSeleccionada = null) {
     let colorOptions = Object.entries(telaColores).map(([key, val]) =>
       `<option value="${key}">${val.nombre}</option>`).join('');
 
+    // Layout: tres columnas del mismo ancho
     container.innerHTML = `
-      <div style="display:flex;gap:2em;justify-content:center;align-items:flex-start;min-height:65vh;">
+      <div style="display:flex; gap:2em; justify-content:center; align-items:stretch; min-height:65vh;">
         <!-- Selector de color a la izquierda -->
-        <div style="flex:0 0 170px;background:#f7f7fa;border-radius:14px;box-shadow:0 2px 10px #b7cbe622;padding:1.2em 1em;">
+        <div style="flex:1 1 0; background:#f7f7fa; border-radius:14px; box-shadow:0 2px 10px #b7cbe622; padding:1.2em 1em; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <label style="font-weight:bold;display:block;margin-bottom:0.8em;">Color de tela:</label>
           <select id="colorTela" style="width:100%;padding:0.4em 0.3em;border-radius:7px;margin-bottom:1em;">
             ${colorOptions}
           </select>
+          <div id="colorPreview" style="width:110px;height:110px;border-radius:10px;border:1.5px solid #bbb;background:#f8f8f5; margin-top:1em;"></div>
         </div>
         <!-- Formulario calculadora centro -->
-        <div style="flex:1;max-width:350px;">
+        <div style="flex:1 1 0; max-width:350px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <h2 style="text-align:center;">Calculadora de Presupuesto</h2>
           <form id="calcForm" style="display:flex;flex-direction:column;align-items:center;gap:0.7em;">
             <input type="hidden" id="tipoCortina" value="${cortinaSeleccionada}">
@@ -347,13 +346,13 @@ function showPage(page, cortinaSeleccionada = null) {
           <button id="volverCatalogoBtn" style="margin-top:2em;background:#bbb;color:#222;border:none;border-radius:6px;padding:0.5em 1.2em;font-weight:bold;cursor:pointer;">Volver al catálogo</button>
         </div>
         <!-- Resumen a la derecha -->
-        <div id="resumenPedido" style="flex:0 0 240px;min-width:180px;background:#fcfcfe;border-radius:14px;box-shadow:0 2px 10px #b7cbe622;padding:1.2em 1em;display:flex;flex-direction:column;align-items:center;">
+        <div id="resumenPedido" style="flex:1 1 0; min-width:180px; background:#fcfcfe; border-radius:14px; box-shadow:0 2px 10px #b7cbe622; padding:1.2em 1em; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <!-- Aquí va el resumen dinámico -->
         </div>
       </div>
     `;
 
-    // Función para actualizar resumen
+    // Función para actualizar resumen y color preview
     function actualizarResumen() {
       const color = document.getElementById('colorTela').value;
       const sistema = document.getElementById('sistemaMontaje').value;
@@ -362,10 +361,13 @@ function showPage(page, cortinaSeleccionada = null) {
       const resultado = document.getElementById('resultadoPresupuesto').innerHTML;
       const colorInfo = telaColores[color];
 
+      // Actualiza el preview del color sólido
+      document.getElementById('colorPreview').style.background = colorInfo.color;
+
       document.getElementById('resumenPedido').innerHTML = `
         <div style="text-align:center;">
           <div style="font-size:1.04em;font-weight:bold;">Resumen del pedido</div>
-          <img src="${colorInfo.img}" alt="Tela ${colorInfo.nombre}" style="width:110px;height:80px;object-fit:cover;margin:10px auto 5px auto;display:block;border-radius:8px;border:1px solid #ddd;">
+          <div style="width:110px;height:110px;object-fit:cover;margin:10px auto 10px auto;display:block;border-radius:10px;border:1.5px solid #bbb;background:${colorInfo.color};"></div>
           <div><b>Cortina:</b> ${nombreCortina}</div>
           <div><b>Color:</b> ${colorInfo.nombre}</div>
           <div><b>Sistema:</b> ${sistema ? sistema.charAt(0).toUpperCase()+sistema.slice(1) : '-'}</div>
@@ -375,7 +377,7 @@ function showPage(page, cortinaSeleccionada = null) {
       `;
     }
 
-    // Eventos para actualizar el resumen
+    // Eventos para actualizar el resumen y el preview
     document.getElementById('colorTela').onchange =
     document.getElementById('sistemaMontaje').onchange =
     document.getElementById('ancho').oninput =
@@ -391,7 +393,7 @@ function showPage(page, cortinaSeleccionada = null) {
       showPage('catalog');
     };
 
-    // Inicializa el resumen
+    // Inicializa el resumen y el preview
     actualizarResumen();
   } else if (page === 'admin') {
     const btn = document.getElementById('admin-access-btn');
@@ -429,7 +431,6 @@ function showPage(page, cortinaSeleccionada = null) {
       preciosMontaje.riel = parseInt(document.getElementById('precioRiel').value) || 0;
       await guardarPrecios();
       document.getElementById('adminMsg').innerHTML = '<span style="color:green;">¡Precios actualizados!</span>';
-      // Refresca valores en el catálogo por si el admin vuelve
       await cargarPrecios();
     };
 
