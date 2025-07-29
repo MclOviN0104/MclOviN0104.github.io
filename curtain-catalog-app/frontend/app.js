@@ -14,6 +14,38 @@ const preciosMontaje = {
   riel: 13
 };
 
+// --- COLORES DE TELAS DE LUJO ---
+const telaColores = {
+  blanco_perla: {
+    nombre: "Blanco Perla",
+    img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+  },
+  gris_oxford: {
+    nombre: "Gris Oxford",
+    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+  },
+  beige_arena: {
+    nombre: "Beige Arena",
+    img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
+  },
+  marfil: {
+    nombre: "Marfil",
+    img: "https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=400&q=80"
+  },
+  taupe: {
+    nombre: "Taupé",
+    img: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=400&q=80"
+  },
+  azul_marino: {
+    nombre: "Azul Marino",
+    img: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=80"
+  },
+  verde_esmeralda: {
+    nombre: "Verde Esmeralda",
+    img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80"
+  }
+};
+
 // --- FUNCIONES PARA BACKEND ---
 // Ahora estos métodos sólo usan los valores locales y no hacen llamadas de red:
 async function cargarPrecios() {
@@ -195,7 +227,7 @@ function showPage(page, cortinaSeleccionada = null) {
             <div style="font-size:1.3em; margin-top:0.5em;">Screen<br><strong>$${preciosCortinas.screen}</strong> por m²</div>
           </div>
           <div class="cortina-item" data-cortina="tradicional" style="cursor:pointer;">
-            <img src="https://persamsb.com/wp-content/uploads/2022/09/cortina-tradicional-3.jpg">
+            <img src="https://www.cortinatecnica.com/sites/default/files/styles/large_retina/public/portfolio/cortina_tradicional.jpeg?itok=9VnwzfHo" alt="Cortina Tradicional">
             <div style="font-size:1.3em; margin-top:0.5em;">Tradicional<br><strong>$${preciosCortinas.tradicional}</strong> por m²</div>
           </div>
         </div>
@@ -276,40 +308,91 @@ function showPage(page, cortinaSeleccionada = null) {
     else if (cortinaSeleccionada === 'screen') nombreCortina = 'Screen';
     else if (cortinaSeleccionada === 'tradicional') nombreCortina = 'Tradicional';
 
+    // Selector de color
+    let colorOptions = Object.entries(telaColores).map(([key, val]) =>
+      `<option value="${key}">${val.nombre}</option>`).join('');
+
     container.innerHTML = `
-      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh;">
-        <h2 style="text-align:center;">Calculadora de Presupuesto</h2>
-        <form id="calcForm" style="max-width:350px; margin:auto; display:flex; flex-direction:column; align-items:center; gap:0.7em;">
-          <input type="hidden" id="tipoCortina" value="${cortinaSeleccionada}">
-          <div style="font-weight:bold;margin-bottom:0.5em; text-align:center;">Tipo de cortina: ${nombreCortina}</div>
-          <label style="width:100%; text-align:left;">Sistema de montaje:
-            <select id="sistemaMontaje" required style="width:100%; margin-top:0.2em;">
-              <option value="">Seleccione</option>
-              <option value="enrollable">Enrollables</option>
-              <option value="plegable">Plegables</option>
-              <option value="riel">Rieles tradicionales</option>
-            </select>
-          </label>
-          <label style="width:100%; text-align:left;">Ancho (m):
-            <input type="number" id="ancho" min="0.01" step="0.01" required style="width:100%; margin-top:0.2em;">
-          </label>
-          <label style="width:100%; text-align:left;">Alto (m):
-            <input type="number" id="alto" min="0.01" step="0.01" required style="width:100%; margin-top:0.2em;">
-          </label>
-          <button type="submit" style="margin-top:0.7em;">Calcular presupuesto</button>
-        </form>
-        <div id="resultadoPresupuesto" style="margin-top:1em; text-align:center;"></div>
-        <button id="volverCatalogoBtn" style="margin-top:2em;background:#bbb;color:#222;border:none;border-radius:6px;padding:0.5em 1.2em;font-weight:bold;cursor:pointer;">Volver al catálogo</button>
+      <div style="display:flex;gap:2em;justify-content:center;align-items:flex-start;min-height:65vh;">
+        <!-- Selector de color a la izquierda -->
+        <div style="flex:0 0 170px;background:#f7f7fa;border-radius:14px;box-shadow:0 2px 10px #b7cbe622;padding:1.2em 1em;">
+          <label style="font-weight:bold;display:block;margin-bottom:0.8em;">Color de tela:</label>
+          <select id="colorTela" style="width:100%;padding:0.4em 0.3em;border-radius:7px;margin-bottom:1em;">
+            ${colorOptions}
+          </select>
+        </div>
+        <!-- Formulario calculadora centro -->
+        <div style="flex:1;max-width:350px;">
+          <h2 style="text-align:center;">Calculadora de Presupuesto</h2>
+          <form id="calcForm" style="display:flex;flex-direction:column;align-items:center;gap:0.7em;">
+            <input type="hidden" id="tipoCortina" value="${cortinaSeleccionada}">
+            <div style="font-weight:bold;margin-bottom:0.5em; text-align:center;">Tipo de cortina: ${nombreCortina}</div>
+            <label style="width:100%; text-align:left;">Sistema de montaje:
+              <select id="sistemaMontaje" required style="width:100%; margin-top:0.2em;">
+                <option value="">Seleccione</option>
+                <option value="enrollable">Enrollables</option>
+                <option value="plegable">Plegables</option>
+                <option value="riel">Rieles tradicionales</option>
+              </select>
+            </label>
+            <label style="width:100%; text-align:left;">Ancho (m):
+              <input type="number" id="ancho" min="0.01" step="0.01" required style="width:100%; margin-top:0.2em;">
+            </label>
+            <label style="width:100%; text-align:left;">Alto (m):
+              <input type="number" id="alto" min="0.01" step="0.01" required style="width:100%; margin-top:0.2em;">
+            </label>
+            <button type="submit" style="margin-top:0.7em;">Calcular presupuesto</button>
+          </form>
+          <div id="resultadoPresupuesto" style="margin-top:1em; text-align:center;"></div>
+          <button id="volverCatalogoBtn" style="margin-top:2em;background:#bbb;color:#222;border:none;border-radius:6px;padding:0.5em 1.2em;font-weight:bold;cursor:pointer;">Volver al catálogo</button>
+        </div>
+        <!-- Resumen a la derecha -->
+        <div id="resumenPedido" style="flex:0 0 240px;min-width:180px;background:#fcfcfe;border-radius:14px;box-shadow:0 2px 10px #b7cbe622;padding:1.2em 1em;display:flex;flex-direction:column;align-items:center;">
+          <!-- Aquí va el resumen dinámico -->
+        </div>
       </div>
     `;
 
-    document.getElementById('calcForm').onsubmit = function(e) {
+    // Función para actualizar resumen
+    function actualizarResumen() {
+      const color = document.getElementById('colorTela').value;
+      const sistema = document.getElementById('sistemaMontaje').value;
+      const ancho = document.getElementById('ancho').value;
+      const alto = document.getElementById('alto').value;
+      const resultado = document.getElementById('resultadoPresupuesto').innerHTML;
+      const colorInfo = telaColores[color];
+
+      document.getElementById('resumenPedido').innerHTML = `
+        <div style="text-align:center;">
+          <div style="font-size:1.04em;font-weight:bold;">Resumen del pedido</div>
+          <img src="${colorInfo.img}" alt="Tela ${colorInfo.nombre}" style="width:110px;height:80px;object-fit:cover;margin:10px auto 5px auto;display:block;border-radius:8px;border:1px solid #ddd;">
+          <div><b>Cortina:</b> ${nombreCortina}</div>
+          <div><b>Color:</b> ${colorInfo.nombre}</div>
+          <div><b>Sistema:</b> ${sistema ? sistema.charAt(0).toUpperCase()+sistema.slice(1) : '-'}</div>
+          <div><b>Medidas:</b> ${(ancho && alto) ? `${ancho} x ${alto} m` : '-'}</div>
+          <div style="margin-top:10px;">${resultado ? resultado : ''}</div>
+        </div>
+      `;
+    }
+
+    // Eventos para actualizar el resumen
+    document.getElementById('colorTela').onchange =
+    document.getElementById('sistemaMontaje').onchange =
+    document.getElementById('ancho').oninput =
+    document.getElementById('alto').oninput =
+      actualizarResumen;
+
+    document.getElementById('calcForm').onsubmit = function(e){
       e.preventDefault();
       calcularPresupuesto();
+      actualizarResumen();
     };
     document.getElementById('volverCatalogoBtn').onclick = function() {
       showPage('catalog');
     };
+
+    // Inicializa el resumen
+    actualizarResumen();
   } else if (page === 'admin') {
     const btn = document.getElementById('admin-access-btn');
     if (btn) btn.style.display = 'none';
